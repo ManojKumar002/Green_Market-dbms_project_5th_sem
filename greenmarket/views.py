@@ -226,10 +226,10 @@ class Logout(View):
 class Product_details(View):
     def get(self,request,*args,**kwargs):
         sel_prod_id=kwargs.get('product_id')
-        selling_list=SoldBy.objects.filter()
-        for i in selling_list:
-            print(i)
-        return render(request,'product_details.html')
+        selling_list=SoldBy.objects.filter(product=Product.objects.get(product_id=sel_prod_id))
+        params={'selling_list':selling_list}
+        print(selling_list[0].product.product_name)
+        return render(request,'product_details.html',params)
 
 
 class Add_soldBy(View):
