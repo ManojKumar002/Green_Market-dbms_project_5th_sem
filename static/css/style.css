@@ -492,12 +492,57 @@ section{
     text-decoration: underline;
 }
 
+.header .add-pro{
+    position: absolute;
+    top:110%; right:-110%;
+    width:35rem;
+    box-shadow: var(--box-shadow);
+    padding:2rem;
+    border-radius: .5rem;
+    background: #fff;
+    text-align: center;
+}
+
+.header .add-pro.active{
+    right:2rem;
+    transition: .4s linear;
+}
+
+.header .add-pro h3{
+    font-size: 2.5rem;
+    text-transform: uppercase;
+    color: var(--black);
+}
+
+.header .add-pro .user-input{
+    width: 100%;
+    margin:.7rem 0;
+    background:#eee;
+    border-radius: .5rem;
+    padding:1rem;
+    font-size: 1.6rem;
+    color:var(--black);
+    text-transform: none;
+}
+
+.header .add-pro p{
+    font-size: 1.4rem;
+    padding:.5rem 0;
+    color:var(--light-color);
+}
+
+.header .add-pro p a{
+    color:var(--orange);
+    text-decoration: underline;
+}
+
+
 
 .home{
     display: flex;
     align-items: center;
     justify-content: center;
-    background: url(https://elements-video-cover-images-0.imgix.net/files/190932512/preview.jpg?auto=compress&crop=edges&fit=crop&fm=jpeg&h=800&w=1200&s=db5c3bed8345ea0d0f9c7802350e6d5a) no-repeat;
+    background: url(https://wallpaperaccess.com/full/803470.jpg) no-repeat;
     background-position: center;
     background-size: cover;
     padding-top: 17rem;
@@ -527,6 +572,27 @@ section{
     padding:1rem 0;
     line-height: 1.8;
 }
+
+
+.home .abtn{
+    margin-top: 1rem;
+    display: inline-block;
+    padding:.8rem 3rem;
+    margin-bottom: 15rem;
+    font-size: 1.7rem;
+    border-radius: .5rem;
+    border:.2rem solid var(--black);
+    color:var(--black);
+    cursor: pointer;
+    background: none;
+}
+
+.home  .abtn:hover{
+    background: var(--orange);
+   
+    color:#fff;
+}
+
 
 .features .box-container{
     display: grid;

@@ -26,6 +26,21 @@ document.querySelector('#cart-btn').onclick = () => {
 }
 
 try {
+	/* Add products form starts */
+
+	let AddproductForm = document.querySelector('.add-pro');
+	document.querySelector('#add-product').onclick = () => {
+		AddproductForm.classList.toggle('active');
+		searchForm.classList.remove('active');
+		shoppingCart.classList.remove('active');
+	}
+
+	/*Add products form ends*/
+} catch (err) {
+	console.log(err);
+}
+
+try {
 	/* User Login form*/
 
 	let loginForm = document.querySelector('.login-form');
@@ -123,6 +138,7 @@ try {
 		FSignupForm.classList.remove('active');
 
 	}
+
 }
 
 catch (err) {

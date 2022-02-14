@@ -12,9 +12,23 @@
 
     <div class="content">
         <h3>fresh and <span>organic</span> products for your</h3>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam libero nostrum veniam facere tempore nisi.
-        </p>
-        <a href="#products" class="btn">shop now</a>
+
+        {% if user_type == "U" %}
+        <a href="#products">
+            <button class="abtn" id="add-product">Explore</button>
+        </a>
+        {% endif %}
+
+        {% if user_type == "F" %}
+            <button class="abtn" id="add-product">Add Product</button>
+        {% endif %}
+
+        {% if user_type == "C" %}
+        <a href="#products">
+            <button class="abtn" id="add-product">Shop Now</button>
+        </a>
+        {% endif %}
+        
     </div>
     </div>
 </section>

@@ -16,7 +16,11 @@ from greenmarket.models import *
 class Home(View):
     def get(self,request):
         products=Product.objects.all()
-        params={'products':products}
+        current_username=self.request.user.username
+        if(Farmer.objects.filter(username=current_username)):
+            params={'products':products,'user_type':'F'}
+        else:
+            params={'products':products,'user_type':'U'}
         return render(request,'home.html',params)
 
 
@@ -39,10 +43,6 @@ class Farmer_signup(View):
                 messages.error(request,'Requires all the feilds')
                 return redirect('home')
 
-
-            if(len(farmer_username)<5):
-                messages.error(request,'Username length should be greater than five')
-                return redirect('home')
 
             if(len(farmer_password)<5):
                 messages.error(request,'Password length should be greater than five')
@@ -79,13 +79,14 @@ class Farmer_signup(View):
                 farmer_data=Farmer(username=farmer_username,lname=farmer_lname,fname=farmer_fname,pno=farmer_pno,city=farmer_city,pincode=farmer_pincode,email=farmer_email)
                 farmer_data.save()
                 messages.success(request,'Account created successfully')
+                return redirect('home')
+
 
             except Exception as e:
                 messages.error(request,'Something gone wrong!')
             return redirect('home')
 
         except Exception as e:
-            messages.error(request,'Something gone wrong!')
             return redirect('home')
 
 
@@ -106,8 +107,8 @@ class Farmer_login(View):
                 messages.success(request, 'Successfully Logged in')
                 return redirect('home')
 
-        except:
-            messages.error(request, 'Something went wrong, Please try again')
+        except Exception as e:
+            print(e)
             return redirect('home')
 
 
@@ -170,13 +171,14 @@ class Customer_signup(View):
                 customer_data=Customer(username=customer_username,lname=customer_lname,fname=customer_fname,pno=customer_pno,city=customer_city,pincode=customer_pincode,email=customer_email)
                 customer_data.save()
                 messages.success(request,'Account created successfully')
+                return redirect('home')
+
 
             except Exception as e:
                 messages.error(request,'Something gone wrong!')
             return redirect('home')
 
         except Exception as e:
-            messages.error(request,'Something gone wrong!')
             return redirect('home')
 
 
@@ -228,3 +230,21 @@ class Product_details(View):
         for i in selling_list:
             print(i)
         return render(request,'product_details.html')
+
+
+class Add_soldBy(View):
+    def post(self,request):
+        farmer_id=Farmer.objects.filter(username=self.request.user)[0]
+        product_id=Product.objects.filter(product_id=int(request.POST.get('product_id')))[0]
+        product_quantity=int(request.POST.get('product_quantity'))
+        product_price=int(request.POST.get('product_price'))
+
+        if(product_quantity<50):
+            messages.error(request,"Product quantity should be atleast 50")
+            return redirect('home')
+        
+        new_soldBy=SoldBy(product=product_id,farmer=farmer_id,price=product_price,quantity=product_quantity)
+        new_soldBy.save()
+
+        messages.success(request,"Product has been added successfully")
+        return redirect('home')

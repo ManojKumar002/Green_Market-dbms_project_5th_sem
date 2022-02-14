@@ -12,4 +12,5 @@ urlpatterns = [
     path('clogin/', views.Customer_login.as_view(),name='customer_login'),
     path('logout/', views.Logout.as_view(),name='logout'),
     path('product_details/<int:product_id>', views.Product_details.as_view(),name='product_details'),
+    path('add_soldBy/', views.Add_soldBy.as_view(),name='add_soldBy'),
 ]
