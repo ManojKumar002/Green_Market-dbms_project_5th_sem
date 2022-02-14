@@ -1,0 +1,244 @@
+{% extends 'index.html' %}
+
+
+{% block body %}
+
+{% load static %}
+
+<!-- home section starts  -->
+
+<section class="home" id="home">
+
+
+    <div class="content">
+        <h3>fresh and <span>organic</span> products for your</h3>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam libero nostrum veniam facere tempore nisi.
+        </p>
+        <a href="#products" class="btn">shop now</a>
+    </div>
+    </div>
+</section>
+
+<!-- home section ends -->
+
+
+
+
+<!-- features section starts  -->
+
+<section class="features" id="features">
+
+    <h1 class="heading"> our <span>features</span> </h1>
+
+    <div class="box-container">
+
+        <div class="box">
+            <img src="{% static 'images/feature-img-1.png' %}" alt="">
+            <h3>fresh and organic</h3>
+            <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Deserunt, earum!</p>
+            <a href="#" class="btn">read more</a>
+        </div>
+
+        <div class="box">
+            <!--<img src="{% static 'images/feature-img-2.png' %}" alt="">-->
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcROzkawoEH92WgngQ4b3_3SIC6Ap87NuCPbzw&usqp=CAU"
+                alt="">
+            <h3>Weather Condition</h3>
+            <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Deserunt, earum!</p>
+            <a href="#" class="btn">Check here</a>
+            <!---- <form id="form"><input type="text" id="search" placeholder="Search By Loaction" autocomplete="off">  
+                   
+                  <div class="fas fa-times" id="cut-btn"></div>
+              </form>  
+              
+              <main id="main">  
+              </main-->
+
+        </div>
+
+        <div class="box">
+            <img src="{% static 'images/feature-img-3.png' %}" alt="">
+            <h3>easy payments</h3>
+            <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Deserunt, earum!</p>
+            <a href="#" class="btn">read more</a>
+        </div>
+
+    </div>
+
+</section>
+
+<!-- features section ends -->
+
+
+
+<!-- products section starts  -->
+
+<section class="products" id="products">
+
+    <h1 class="heading"> our <span>products</span> </h1>
+
+
+    <div class="swiper product-slider">
+
+        <div class="swiper-wrapper">
+
+            {% for product in products %}
+
+            <div class="swiper-slide box" id="{{product.product_id}}" >
+                <a href="{% url 'product_details' product_id=product.product_id %}"><img src="/media/{{product.img}}" alt=""></a>
+                <h3>Fresh {{product.product_name}}</h3>
+            </div>
+
+            {% if forloop.counter|divisibleby:4 and forloop.counter > 0 and not forloop.last %}
+
+            </div>
+            </div>
+
+            <div class="swiper product-slider">
+            <div class="swiper-wrapper">
+
+        {% endif %}
+
+        {% endfor %}
+        </div>
+    </div>
+
+</section>
+
+<!-- products section ends -->
+
+
+
+
+<!-- review section starts  -->
+
+<section class="review" id="review">
+
+    <h1 class="heading"> customer's <span>review</span> </h1>
+
+    <div class="swiper review-slider">
+
+        <div class="swiper-wrapper">
+
+            <div class="swiper-slide box">
+                <img src="{% static 'images/pic-1.png' %}" alt="">
+                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Unde sunt fugiat dolore ipsum id est maxime
+                    ad tempore quasi tenetur.</p>
+                <h3>name xxx</h3>
+                <div class="stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                </div>
+            </div>
+
+            <div class="swiper-slide box">
+                <img src="{% static 'images/pic-2.png' %}" alt="">
+                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Unde sunt fugiat dolore ipsum id est maxime
+                    ad tempore quasi tenetur.</p>
+                <h3>name xxx</h3>
+                <div class="stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                </div>
+            </div>
+
+            <div class="swiper-slide box">
+                <img src="{% static 'images/pic-3.png' %}" alt="">
+                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Unde sunt fugiat dolore ipsum id est maxime
+                    ad tempore quasi tenetur.</p>
+                <h3>name xxx</h3>
+                <div class="stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                </div>
+            </div>
+
+            <div class="swiper-slide box">
+                <img src="{% static 'images/pic-4.png' %}" alt="">
+                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Unde sunt fugiat dolore ipsum id est maxime
+                    ad tempore quasi tenetur.</p>
+                <h3>name xxx</h3>
+                <div class="stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- review section ends -->
+
+
+
+<!-- blogs section starts  -->
+
+<section class="blogs" id="blogs">
+
+    <h1 class="heading"> our <span>blogs</span> </h1>
+
+    <div class="box-container">
+
+        <div class="box">
+            <img src="{% static 'images/blog-1.jpg' %}" alt="">
+            <div class="content">
+                <div class="icons">
+                    <a href="#"> <i class="fas fa-user"></i> by user </a>
+                    <a href="#"> <i class="fas fa-calendar"></i> 1st may, 2021 </a>
+                </div>
+                <h3>fresh and organic vegitables and fruits</h3>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Veniam, expedita.</p>
+                <a href="#" class="btn">read more</a>
+            </div>
+        </div>
+
+        <div class="box">
+            <img src="{% static 'images/blog-2.jpg' %}" alt="">
+            <div class="content">
+                <div class="icons">
+                    <a href="#"> <i class="fas fa-user"></i> by user </a>
+                    <a href="#"> <i class="fas fa-calendar"></i> 1st may, 2021 </a>
+                </div>
+                <h3>fresh and organic vegitables and fruits</h3>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Veniam, expedita.</p>
+                <a href="#" class="btn">read more</a>
+            </div>
+        </div>
+
+        <div class="box">
+            <img src="{% static 'images/blog-3.jpg' %}" alt="">
+            <div class="content">
+                <div class="icons">
+                    <a href="#"> <i class="fas fa-user"></i> by user </a>
+                    <a href="#"> <i class="fas fa-calendar"></i> 1st may, 2021 </a>
+                </div>
+                <h3>fresh and organic vegitables and fruits</h3>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Veniam, expedita.</p>
+                <a href="#" class="btn">read more</a>
+            </div>
+        </div>
+
+    </div>
+
+</section>
+
+<!-- blogs section ends -->
+
+
+
+{% endblock %}
