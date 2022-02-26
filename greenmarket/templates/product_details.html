@@ -69,29 +69,37 @@
             <div class="row mt-4">
                 <h2 style="font-size: 36px;  ">Available quantity : {{i.quantity}}kg</h2>
             </div>
-            <div class="row mt-4 form">
-
-                <h2>Required Quantity : &nbsp; </h2>
-                <input type="number" placeholder="Enter" id="q">
-                <h2 style="width: 100px; font-size: 40px;">&nbsp;kg</h2>
-
-            </div>
             <div class="row mt-4">
                 <h2>Seller: &nbsp; &nbsp;</h2>
                 <p style="font-size: 28px; font-weight: 700; color: green;"> {{i.farmer.fname}} {{i.farmer.lname}} |
                     &nbsp;<span style="color:red">{{i.farmer.pno}}</span> </p>
             </div>
             <div class="row mt-4">
-                <h3 style="font-size:36px" class="text-info"><i class="fa fa-map-marker" aria-hidden="true"></i>
-                </h3>
-                <p style="font-size: 30px ;font-weight:700; color:orange"> &nbsp; {{i.farmer.city}} |
-                    {{i.farmer.pincode}}</p>
+                <span style="font-size:36px" class="text-info"><i class="fa fa-map-marker" aria-hidden="true"></i>
+
+                    <span style="font-size: 30px ;font-weight:700; color:orange"> &nbsp; {{i.farmer.city}} |
+                        {{i.farmer.pincode}}</span>
+                </span>
             </div>
 
-            <div class="row mt-4">
-                <a class="btn "> <i class="fa fa-cart-plus" aria-hidden="true"></i> Add to Cart</a>
-            </div>
+            <form action="{% url 'add_to_cart' %}" method="post">{% csrf_token %}
+                <div class="row mt-4">
+                    <div class="row m-3 form">
+
+                        <h2>Required Quantity : &nbsp; </h2>
+                        <input type="number" name="quantity" placeholder="Enter" id="q">
+                        <h2 style="width: 100px; font-size: 40px;">&nbsp;kg</h2>
+
+                    </div>
+                    <input type="hidden" name="purchase_price" value="{{i.price}}">
+                    <input type="hidden" name="product_id" value="{{i.product.product_id}}">
+                    <input type="hidden" name="customer_name" value="{{user.username}}">
+                    <input type="hidden" name="farmer_id" value="{{i.farmer.farmer_id}}">
+                    <button class="btn w-100" type="submit"> <i class="fa fa-cart-plus" aria-hidden="true"></i> Add to
+                        Cart</button>
+            </form>
         </div>
+</div>
 </div>
 {% endif %}
 {% endfor %}
@@ -120,7 +128,20 @@
                     <div>
                         <h4 style="color: red;">City :{{i.farmer.city}}</h4>
                     </div>
-                    <a class="btn btn-danger"><i class="fa fa-cart-plus" aria-hidden="true"></i> Add To Cart</a>
+                    <form action="{% url 'add_to_cart' %}" method="post">{% csrf_token %}
+                        <div class="row mt-1 form">
+                            <h4>Required Quantity &nbsp; </h4>
+                            <span>
+                                <input style="width: 230px;font-size: small;" type="number" name="quantity" placeholder="Enter quantity in Kg" id="q">
+                            </span>
+                        </div>
+                        <input type="hidden" name="purchase_price" value="{{i.price}}">
+                        <input type="hidden" name="product_id" value="{{i.product.product_id}}">
+                        <input type="hidden" name="customer_name" value="{{user.username}}">
+                        <input type="hidden" name="farmer_id" value="{{i.farmer.farmer_id}}">
+                        <button class="btn" type="submit"> <i class="fa fa-cart-plus" aria-hidden="true"></i> Add
+                            to Cart</button>
+                    </form>
                     <br /><br />
                 </div>
             </div>

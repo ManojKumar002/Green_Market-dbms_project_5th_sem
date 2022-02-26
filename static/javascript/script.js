@@ -20,7 +20,11 @@ document.querySelector('#cart-btn').onclick = () => {
 	searchForm.classList.remove('active');
 	loginForm.classList.remove('active');
 	navbar.classList.remove('active');
-	SignupForm.classList.remove('active');
+	try{
+		SignupForm.classList.remove('active');
+	}catch(e){
+		console.log(e);
+	}
 	loginChoice.classList.remove('active');
 
 }

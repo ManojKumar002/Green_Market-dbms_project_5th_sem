@@ -85,10 +85,9 @@ class Purchases(models.Model):
     quantity = models.IntegerField(db_column='QUANTITY')  # Field name made lowercase.
     purchase_price = models.IntegerField(db_column='PURCHASE_PRICE')  # Field name made lowercase.
     purchase_timestamp = models.DateTimeField(db_column='PURCHASE_TIMESTAMP', blank=True, null=True)  # Field name made lowercase.
-    delivery_date = models.DateField(db_column='DELIVERY_DATE', blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'PURCHASES'
 
 

@@ -1,5 +1,8 @@
+from ast import Delete
 import email
 from itertools import product
+from logging import warning
+from urllib import request
 from django import http
 from django.http import HttpResponse, QueryDict
 from django.shortcuts import render,redirect
@@ -8,6 +11,7 @@ from django.http import HttpResponse
 from django.contrib.auth import authenticate,logout,login
 from django.contrib.auth.models import User
 from django.contrib import messages
+from django.db import connection
 
 from greenmarket.models import *
 
@@ -15,12 +19,19 @@ from greenmarket.models import *
 # Create your views here.
 class Home(View):
     def get(self,request):
+        params={}
         products=Product.objects.all()
         current_username=self.request.user.username
-        if(Farmer.objects.filter(username=current_username)):
-            params={'products':products,'user_type':'F'}
+        #?cheks the type of the user
+        if(Farmer.objects.raw("SELECT * FROM FARMER WHERE USERNAME=%s",[current_username])):
+            usertype='F'
+            params={'products':products,'user_type':usertype}
+        elif(Customer.objects.raw("SELECT * FROM CUSTOMER WHERE USERNAME=%s",[current_username])):
+            usertype='C'
+            params={'products':products,'user_type':usertype}
         else:
-            params={'products':products,'user_type':'U'}
+            usertype='U'
+            params={'products':products,'user_type':usertype}
         return render(request,'home.html',params)
 
 
@@ -248,3 +259,91 @@ class Add_soldBy(View):
 
         messages.success(request,"Product has been added successfully")
         return redirect('home')
+
+
+class Add_to_cart(View):
+    # here get method is used to delete the cart item
+    def get(self,request):
+        cart_product_id=request.GET.get('cart_product_id')
+        #!delete query for cart item
+        with connection.cursor() as cursor:
+            cursor.execute(
+            "DELETE FROM CONSUMER_CART WHERE ID=%s",[cart_product_id]
+        )
+
+        return redirect('home')
+
+    #to add the product in the cart
+    def post(self,request):
+        quantity=request.POST.get('quantity')
+        purchase_price=request.POST.get('purchase_price')
+        product_id=request.POST.get('product_id')
+        customer_name=request.POST.get('customer_name')
+        farmer_id=request.POST.get('farmer_id')
+        try:
+            customer_object=Customer.objects.get(username=customer_name)
+        except:
+            messages.error(request,'Please create a customer account to make purchases')
+            return redirect('home')
+
+        farmer_object=Farmer.objects.get(farmer_id=farmer_id)
+        product_object=Product.objects.get(product_id=product_id)
+        cart=ConsumerCart(customer=customer_object,farmer=farmer_object,product=product_object,price=purchase_price,quantity=quantity)
+        cart.save()
+        return redirect('home')
+
+
+class Purchases(View):
+    def post(self,request):
+        current_username=self.request.user.username
+
+        try:
+            #!retreiving the current logged in consumer details 
+            customer_object=list(Customer.objects.raw("SELECT * FROM CUSTOMER WHERE USERNAME=%s",[current_username]))
+            customer_id=customer_object[0].customer_id
+        except:
+            messages.error(request,"Please create a customer account to make purchases ")
+            return redirect('home')
+
+        #!retreiving customer cart data
+        cart_data=list(ConsumerCart.objects.raw("SELECT * FROM CONSUMER_CART WHERE CUSTOMER_ID=%s",[customer_id]))
+        if(len(cart_data)==0):
+            messages.warning(request,"Plaese add products to the cart first")
+            return redirect('home')
+
+        for i in cart_data:
+            product_id=i.product.product_id
+            farmer_id=i.farmer.farmer_id
+            #!getting sold_by tables data to update
+            sold_by_object=list(SoldBy.objects.raw("SELECT * FROM SOLD_BY WHERE PRODUCT_ID=%s AND FARMER_ID=%s",[product_id,farmer_id]))[0]
+            
+            if(sold_by_object.quantity> i.quantity):
+                with connection.cursor() as cursor:
+                    #!updating the sold_by table if ordered quntity is less than available quantity
+                    cursor.execute(
+                        "UPDATE SOLD_BY SET QUANTITY=%s WHERE ID=%s",[(sold_by_object.quantity- i.quantity),sold_by_object.id]   
+                    )
+
+            elif(sold_by_object.quantity == i.quantity):
+                with connection.cursor() as cursor:
+                    #!updating the sold_by table if ordered quntity is equal available quantity
+                    cursor.execute(
+                        "DELETE FROM SOLD_BY WHERE ID=%s",[sold_by_object.id]  
+                    )
+
+            with connection.cursor() as cursor:
+                    #!creating the tupple in purchase
+                    cursor.execute(
+                        "INSERT INTO PURCHASES(PRODUCT_ID,FARMER_ID,CUSTOMER_ID,QUANTITY,PURCHASE_PRICE)VALUES(%s,%s,%s,%s,%s)",\
+                            [i.product.product_id,i.farmer.farmer_id,i.customer.customer_id,i.quantity,i.price]
+                    )
+
+            with connection.cursor() as cursor:
+                    #!updating the sold_by table if ordered quntity is equal available quantity
+                    cursor.execute(
+                        "DELETE FROM CONSUMER_CART WHERE ID=%s",[i.id]
+                    )
+
+        messages.success(request,"Order placed successfully")
+        return redirect('home')
+            

@@ -41,10 +41,10 @@
 
     <header class="header">
 
-        <a href="#" class="logo"> <i class="fas fa-shopping-basket"></i> Green Market</a>
+        <a href="{% url 'home' %}" class="logo"> <i class="fas fa-shopping-basket"></i> Green Market</a>
 
         <nav class="navbar">
-            <a href="#home">home</a>
+            <a href="{% url 'home' %}">home</a>
             <a href="#features">features</a>
             <a href="#products">products</a>
             <!--<a href="#categories">categories</a>-->
@@ -54,9 +54,33 @@
 
         <div class="icons">
             <div class="fas fa-bars" id="menu-btn"></div>
-            <div class="fas fa-search" id="search-btn"></div>
             <div class="fas fa-shopping-cart" id="cart-btn"></div>
             <div class="fas fa-comment" id="chat-btn"></div>
+        </div>
+
+        <div class="shopping-cart">
+            {% for i in cart_data %}
+            <div class="box">
+                <img src="/media/{{i.product.img}}" alt="img">
+                
+                <!--form to delete products nthere in cart-->
+                <form action="{% url 'add_to_cart' %}" method="get">{% csrf_token %}
+                    <input type="hidden" name="cart_product_id" value="{{i.id}}">
+                    <button type="submit" class="fas fa-trash"></button>
+                </form>
+                
+                <div class="content mt-5">
+                    <h3>{{i.product.product_name}}</h3>
+                    <span class="price">Rs.{{i.price}}/Kg</span>
+                    <span class="quantity">qty : {{i.quantity}}kg</span>
+                    <div style="font-size: medium;">Farmer : {{i.farmer.fname}} {{i.farmer.lname}}</div>
+                </div>
+            </div>
+            {% endfor %}
+            <div class="total"> Total : Rs.{{total_price}}/- </div>
+            <form action="{% url 'purchases' %}" method="post">{% csrf_token %}
+                <button style="margin: auto ;" type="submit" class="btn">Checkout</button>
+            </form>
         </div>
 
 
@@ -66,39 +90,35 @@
         <a href="{% url 'logout' %}"> <button class="dropbtn">Logout</button></a>
         <!-- </div> -->
 
-        <form action="" class="search-form">
-            <input type="search" id="search-box" placeholder="search here...">
-            <label for="search-box" class="fas fa-search"></label>
+
+        {% if user_type == "F" %}
+
+        <!-- Add Products form start-->
+        <form action="{% url 'add_soldBy' %}" method="POST" class="add-pro">{% csrf_token %}
+
+            <h3>Add Your Product</h3>
+
+
+            <select name="product_id" type="number" class="user-input">
+                <option value="2">Onion</option>
+                <option value="3">Orange</option>
+                <option value="4">Tomato</option>
+                <option value="5">Cabbage</option>
+                <option value="6">Potato</option>
+                <option value="7">Avocado</option>
+                <option value="8">Carrot</option>
+                <option value="9">Lemon</option>
+                <option selected>Select</option>
+            </select>
+            <input class="user-input" type="number" name="product_quantity" placeholder="Quantity" required>
+            <input type="number" name="product_price" placeholder="Price/Kg(INR)" class="user-input" required>
+
+            <input type="submit" value="Add" class="btn">
+
         </form>
 
-            {% if user_type == "F" %}
-            
-            <!-- Add Products form start-->
-            <form action="{% url 'add_soldBy' %}" method="POST" class="add-pro">{% csrf_token %}
-
-                <h3>Add Your Product</h3>
-
-
-                <select name ="product_id" type="number" class="user-input">
-                    <option value="2" >Onion</option>
-                    <option value="3" >Orange</option>
-                    <option value="4" >Tomato</option>
-                    <option value="5" >Cabbage</option>
-                    <option value="6" >Potato</option>
-                    <option value="7" >Avocado</option>
-                    <option value="8" >Carrot</option>
-                    <option value="9" >Lemon</option>
-                    <option selected>Select</option>
-                </select>
-                <input class="user-input" type="number" name="product_quantity" placeholder="Quantity" required>
-                <input type="number" name="product_price" placeholder="Price/Kg(INR)" class="user-input" required>
-
-                <input type="submit" value="Add" class="btn">
-
-            </form>
-
-            <!--  add Product form-->
-            {% endif %}
+        <!--  add Product form-->
+        {% endif %}
 
         {% else %}
 
