@@ -54,6 +54,7 @@
 
         <div class="icons">
             <div class="fas fa-bars" id="menu-btn"></div>
+            <div class="fas fa-search" id="search-btn"></div>
             <div class="fas fa-shopping-cart" id="cart-btn"></div>
             <div class="fas fa-comment" id="chat-btn"></div>
         </div>
@@ -79,7 +80,7 @@
             {% endfor %}
             <div class="total"> Total : Rs.{{total_price}}/- </div>
             <form action="{% url 'purchases' %}" method="post">{% csrf_token %}
-                <button style="margin: auto ;" type="submit" class="btn">Checkout</button>
+                <button type="submit" class="btn">Checkout</button>
             </form>
         </div>
 
@@ -90,6 +91,10 @@
         <a href="{% url 'logout' %}"> <button class="dropbtn">Logout</button></a>
         <!-- </div> -->
 
+        <form action="" class="search-form">
+            <input type="search" id="search-box" placeholder="search here...">
+            <label for="search-box" class="fas fa-search"></label>
+        </form>
 
         {% if user_type == "F" %}
 
