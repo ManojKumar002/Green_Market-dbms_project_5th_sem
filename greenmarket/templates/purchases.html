@@ -1,0 +1,112 @@
+{% extends 'index.html' %}
+
+{% block css %}
+<style>
+
+    .container{
+        margin-top: 150px;
+        margin-bottom: 30vh;
+    }
+
+    table,
+    th,
+    td {
+        border: 1px solid red;
+        text-align: center;
+
+    }
+
+    th {
+        color: #130f40;
+        font-size: 1.5rem;
+    }
+
+    td {
+        font-size: 1.3rem;
+        color: #666;
+    }
+
+    h2 {
+        text-align: center;
+        font-variant: small-caps;
+        font-size: 2.5rem;
+        color: #130f40;
+        text-shadow: 1px 1px 3px;
+        margin-bottom: 5vh;
+
+    }
+</style>
+
+{% endblock %}
+
+
+
+{% block body %}
+
+<div class="container">
+
+    {% if user_type == "C" %}
+
+    <h2>My Orders</h2>
+    <table style="width:100%">
+        <tr>
+            <th>Product</th>
+            <th>Product Name</th>
+            <th>Order_ID</th>
+            <th>Seller Details</th>
+            <th>Quantity & Price</th>
+            <th>Date & Time</th>
+        </tr>
+        
+        {% for i in purchase_data %}
+
+        <tr>
+            <td><img src="/media/{{i.product.img}}" alt="" width=200px height=150px></td>
+            <td>{{i.product.product_name}}</td>
+            <td>{{i.id}}</td>
+            <td>{{i.farmer.fname}} {{i.farmer.lname}}  
+                <br>{{i.customer.pno}}
+                <br> <br><i class="fa fa-map-marker" style="color:red"></i> {{i.farmer.city}} </td>
+            <td>{{i.quantity}}kg <br> {{i.purchase_price}}₹/kg</td>
+            <td>{{i.purchase_timestamp}}</td>
+        </tr>
+
+        {% endfor %}
+    </table>
+    {% endif %}
+
+
+
+
+    {% if user_type == "F" %}
+
+    <h2>Your Sellings</h2>
+    <table style="width:100%">
+        <tr>
+            <th>Product</th>
+            <th>Product Name</th>
+            <th>Order_ID</th>
+            <th>Purchaser Details</th>
+            <th>Quantity & Price</th>
+            <th>Date & Time</th>
+        </tr>
+        
+        {% for i in purchase_data %}
+
+        <tr>
+            <td><img src="/media/{{i.product.img}}" alt="" width=200px height=150px></td>
+            <td>{{i.product.product_name}}</td>
+            <td>{{i.id}}</td>
+            <td>{{i.customer.fname}} {{i.customer.lname}}  
+                <br>{{i.customer.pno}}
+                <br> <br><i class="fa fa-map-marker" style="color:red"></i> {{i.customer.city}} </td>
+            <td>{{i.quantity}}kg <br> {{i.purchase_price}}₹/kg</td>
+            <td>{{i.purchase_timestamp}}</td>
+        </tr>
+
+        {% endfor %}
+    </table>
+    {% endif %}
+</div>
+
+{% endblock %}

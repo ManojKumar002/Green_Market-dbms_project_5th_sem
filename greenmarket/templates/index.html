@@ -25,6 +25,8 @@
     <!-- custom css file link  -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" charset="utf-8"></script>
+
 
     {% block css %}
 
@@ -47,16 +49,14 @@
             <a href="{% url 'home' %}">home</a>
             <a href="#features">features</a>
             <a href="#products">products</a>
-            <!--<a href="#categories">categories</a>-->
             <a href="#review">review</a>
             <a href="#blogs">blogs</a>
+            <a href="{% url 'purchases' %}">Purchases</a>
         </nav>
 
         <div class="icons">
             <div class="fas fa-bars" id="menu-btn"></div>
-            <div class="fas fa-search" id="search-btn"></div>
             <div class="fas fa-shopping-cart" id="cart-btn"></div>
-            <div class="fas fa-comment" id="chat-btn"></div>
         </div>
 
         <div class="shopping-cart">
@@ -91,10 +91,6 @@
         <a href="{% url 'logout' %}"> <button class="dropbtn">Logout</button></a>
         <!-- </div> -->
 
-        <form action="" class="search-form">
-            <input type="search" id="search-box" placeholder="search here...">
-            <label for="search-box" class="fas fa-search"></label>
-        </form>
 
         {% if user_type == "F" %}
 

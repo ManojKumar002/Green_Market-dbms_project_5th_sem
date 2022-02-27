@@ -1,4 +1,5 @@
 from ast import Delete
+from distutils.log import error
 import email
 from itertools import product
 from logging import warning
@@ -22,16 +23,7 @@ class Home(View):
         params={}
         products=Product.objects.all()
         current_username=self.request.user.username
-        #?cheks the type of the user
-        if(Farmer.objects.raw("SELECT * FROM FARMER WHERE USERNAME=%s",[current_username])):
-            usertype='F'
-            params={'products':products,'user_type':usertype}
-        elif(Customer.objects.raw("SELECT * FROM CUSTOMER WHERE USERNAME=%s",[current_username])):
-            usertype='C'
-            params={'products':products,'user_type':usertype}
-        else:
-            usertype='U'
-            params={'products':products,'user_type':usertype}
+        params={'products':products}
         return render(request,'home.html',params)
 
 
@@ -280,6 +272,13 @@ class Add_to_cart(View):
         product_id=request.POST.get('product_id')
         customer_name=request.POST.get('customer_name')
         farmer_id=request.POST.get('farmer_id')
+        available_quantity=request.POST.get('available_quantity')
+
+        if(available_quantity<quantity):
+            messages.error(request,"Entered quantity should be less than the available quantity")
+            return redirect('home')
+
+    
         try:
             customer_object=Customer.objects.get(username=customer_name)
         except:
@@ -293,7 +292,33 @@ class Add_to_cart(View):
         return redirect('home')
 
 
-class Purchases(View):
+class Purchase(View):
+
+    def get(self,request):
+        params={}
+
+        current_username=self.request.user.username
+        if(Farmer.objects.raw("SELECT * FROM FARMER WHERE USERNAME=%s",[current_username])):
+            farmer_object=list(Farmer.objects.raw("SELECT * FROM FARMER WHERE USERNAME=%s",[current_username]))
+            farmer_id=farmer_object[0].farmer_id
+            purchase_data=list(Purchases.objects.raw("SELECT * FROM PURCHASES WHERE FARMER_ID=%s",[farmer_id]))
+
+
+        elif(Customer.objects.raw("SELECT * FROM CUSTOMER WHERE USERNAME=%s",[current_username])):
+            customer_object=list(Customer.objects.raw("SELECT * FROM CUSTOMER WHERE USERNAME=%s",[current_username]))
+            customer_id=customer_object[0].customer_id
+            purchase_data=list(Purchases.objects.raw("SELECT * FROM PURCHASES WHERE CUSTOMER_ID=%s",[customer_id]))
+            print(purchase_data)
+
+        else:
+            messages.warning(request,"Login to make purchases")
+            return redirect('home')
+
+
+        params={'purchase_data':purchase_data}
+        return render(request,'purchases.html',params)
+
+
     def post(self,request):
         current_username=self.request.user.username
 

@@ -1,23 +1,9 @@
 
-/* Search-Form table*/
-let searchForm = document.querySelector('.search-form');
-
-document.querySelector('#search-btn').onclick = () => {
-	searchForm.classList.toggle('active');
-	shoppingCart.classList.remove('active');
-	loginForm.classList.remove('active');
-	navbar.classList.remove('active');
-	SignupForm.classList.remove('active');
-	loginChoice.classList.remove('active');
-}
-
-
 /* Shopping cart table*/
 let shoppingCart = document.querySelector('.shopping-cart');
 
 document.querySelector('#cart-btn').onclick = () => {
 	shoppingCart.classList.toggle('active');
-	searchForm.classList.remove('active');
 	loginForm.classList.remove('active');
 	navbar.classList.remove('active');
 	try{
@@ -35,7 +21,6 @@ try {
 	let AddproductForm = document.querySelector('.add-pro');
 	document.querySelector('#add-product').onclick = () => {
 		AddproductForm.classList.toggle('active');
-		searchForm.classList.remove('active');
 		shoppingCart.classList.remove('active');
 	}
 
@@ -51,7 +36,6 @@ try {
 
 	document.querySelector('.dropbtnyyy').onclick = () => {
 		loginForm.classList.toggle('active');
-		searchForm.classList.remove('active');
 		shoppingCart.classList.remove('active');
 		navbar.classList.remove('active');
 		SignupForm.classList.remove('active');
@@ -63,7 +47,6 @@ try {
 	let FloginForm = document.querySelector('.Flogin-form');
 	document.querySelector('.dropbtn0').onclick = () => {
 		FloginForm.classList.toggle('active');
-		searchForm.classList.remove('active');
 		shoppingCart.classList.remove('active');
 		navbar.classList.remove('active');
 		SignupForm.classList.remove('active');
@@ -75,7 +58,6 @@ try {
 	let loginChoice = document.querySelector('.log');
 	document.querySelector('.dropbtn').onclick = () => {
 		loginChoice.classList.toggle('active');
-		searchForm.classList.remove('active');
 		shoppingCart.classList.remove('active');
 		navbar.classList.remove('active');
 		loginForm.classList.remove('active');
@@ -93,7 +75,6 @@ try {
 	document.querySelector('.Ssign a').onclick = () => {
 		FSignupForm.classList.toggle('active');
 		loginForm.classList.remove('active');
-		searchForm.classList.remove('active');
 		shoppingCart.classList.remove('active');
 		navbar.classList.remove('active');
 		loginChoice.classList.remove('active');
@@ -108,7 +89,6 @@ try {
 	document.querySelector('.sign a').onclick = () => {
 		SignupForm.classList.toggle('active');
 		loginForm.classList.remove('active');
-		searchForm.classList.remove('active');
 		shoppingCart.classList.remove('active');
 		navbar.classList.remove('active');
 	}
@@ -165,13 +145,11 @@ let navbar = document.querySelector('.navbar');
 
 document.querySelector('#menu-btn').onclick = () => {
 	navbar.classList.toggle('active');
-	searchForm.classList.remove('active');
 	shoppingCart.classList.remove('active');
 	loginForm.classList.remove('active');
 }
 
 window.onscroll = () => {
-	searchForm.classList.remove('active');
 	shoppingCart.classList.remove('active');
 	loginForm.classList.remove('active');
 	navbar.classList.remove('active');

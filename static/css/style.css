@@ -255,6 +255,8 @@ section{
     box-shadow: var(--box-shadow);
     width:35rem;
     background: #fff;
+    max-height: 80vh;
+    overflow: scroll;
 }
 
 .header .shopping-cart.active{
@@ -268,6 +270,7 @@ section{
     gap:1rem;
     position: relative;
     margin:1rem 0;
+
 }
 
 .header .shopping-cart .box img{
