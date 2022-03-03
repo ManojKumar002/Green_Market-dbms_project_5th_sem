@@ -237,17 +237,31 @@ class Product_details(View):
 
 class Add_soldBy(View):
     def post(self,request):
-        farmer_id=Farmer.objects.filter(username=self.request.user)[0]
-        product_id=Product.objects.filter(product_id=int(request.POST.get('product_id')))[0]
+        farmer_obj=Farmer.objects.filter(username=self.request.user)[0]
+
+        if(request.POST.get('product_id')=="Select"):
+            messages.error(request,"Please choose valid option")
+            return redirect('home')
+
+        if(int(request.POST.get('product_price'))<=0):
+            messages.error(request,"Price should be greater than zero")
+            return redirect('home')
+
+        product_obj=Product.objects.filter(product_id=int(request.POST.get('product_id')))[0]
         product_quantity=int(request.POST.get('product_quantity'))
         product_price=int(request.POST.get('product_price'))
 
-        if(product_quantity<50):
+        if(int(product_quantity)<50):
             messages.error(request,"Product quantity should be atleast 50")
             return redirect('home')
         
-        new_soldBy=SoldBy(product=product_id,farmer=farmer_id,price=product_price,quantity=product_quantity)
-        new_soldBy.save()
+        with connection.cursor() as cursor:
+            cursor.execute(
+                #!insert query to add tupples to the table SOLD_BY
+                "INSERT INTO SOLD_BY(PRODUCT_ID,FARMER_ID,QUANTITY,PRICE)VALUES(%s,%s,%s,%s)",\
+                    [product_obj.product_id,farmer_obj.farmer_id,product_quantity,product_price]
+            )
+
 
         messages.success(request,"Product has been added successfully")
         return redirect('home')
@@ -257,9 +271,10 @@ class Add_to_cart(View):
     # here get method is used to delete the cart item
     def get(self,request):
         cart_product_id=request.GET.get('cart_product_id')
-        #!delete query for cart item
+
         with connection.cursor() as cursor:
             cursor.execute(
+            #!delete query for cart item
             "DELETE FROM CONSUMER_CART WHERE ID=%s",[cart_product_id]
         )
 
@@ -273,8 +288,9 @@ class Add_to_cart(View):
         customer_name=request.POST.get('customer_name')
         farmer_id=request.POST.get('farmer_id')
         available_quantity=request.POST.get('available_quantity')
+        print(available_quantity,quantity)
 
-        if(available_quantity<quantity):
+        if(int(available_quantity)<int(quantity)):
             messages.error(request,"Entered quantity should be less than the available quantity")
             return redirect('home')
 
@@ -301,13 +317,13 @@ class Purchase(View):
         if(Farmer.objects.raw("SELECT * FROM FARMER WHERE USERNAME=%s",[current_username])):
             farmer_object=list(Farmer.objects.raw("SELECT * FROM FARMER WHERE USERNAME=%s",[current_username]))
             farmer_id=farmer_object[0].farmer_id
-            purchase_data=list(Purchases.objects.raw("SELECT * FROM PURCHASES WHERE FARMER_ID=%s",[farmer_id]))
+            purchase_data=list(Purchases.objects.raw("SELECT * FROM PURCHASES WHERE FARMER_ID=%s ORDER BY PURCHASE_TIMESTAMP DESC",[farmer_id]))
 
 
         elif(Customer.objects.raw("SELECT * FROM CUSTOMER WHERE USERNAME=%s",[current_username])):
             customer_object=list(Customer.objects.raw("SELECT * FROM CUSTOMER WHERE USERNAME=%s",[current_username]))
             customer_id=customer_object[0].customer_id
-            purchase_data=list(Purchases.objects.raw("SELECT * FROM PURCHASES WHERE CUSTOMER_ID=%s",[customer_id]))
+            purchase_data=list(Purchases.objects.raw("SELECT * FROM PURCHASES WHERE CUSTOMER_ID=%s ORDER BY PURCHASE_TIMESTAMP DESC",[customer_id]))
             print(purchase_data)
 
         else:
@@ -353,7 +369,7 @@ class Purchase(View):
                 with connection.cursor() as cursor:
                     #!updating the sold_by table if ordered quntity is equal available quantity
                     cursor.execute(
-                        "DELETE FROM SOLD_BY WHERE ID=%s",[sold_by_object.id]  
+                        "DELETE FROM SOLD_BY   WHERE ID=%s",[sold_by_object.id]
                     )
 
             with connection.cursor() as cursor:

@@ -64,11 +64,6 @@
             <div class="box">
                 <img src="/media/{{i.product.img}}" alt="img">
                 
-                <!--form to delete products nthere in cart-->
-                <form action="{% url 'add_to_cart' %}" method="get">{% csrf_token %}
-                    <input type="hidden" name="cart_product_id" value="{{i.id}}">
-                    <button type="submit" class="fas fa-trash"></button>
-                </form>
                 
                 <div class="content mt-5">
                     <h3>{{i.product.product_name}}</h3>
@@ -76,11 +71,19 @@
                     <span class="quantity">qty : {{i.quantity}}kg</span>
                     <div style="font-size: medium;">Farmer : {{i.farmer.fname}} {{i.farmer.lname}}</div>
                 </div>
+
+                <!--form to delete products nthere in cart-->
+                <form action="{% url 'add_to_cart' %}" method="get">{% csrf_token %}
+                    <input type="hidden" name="cart_product_id" value="{{i.id}}">
+                    <button type="submit"><img style="width: 24px;height: auto;" src="https://img.icons8.com/material-rounded/24/000000/filled-trash.png"/></button>
+                    <!-- <button type="submit" class="fas fa-trash pull-right"></button> -->
+                </form>
+
             </div>
             {% endfor %}
             <div class="total"> Total : Rs.{{total_price}}/- </div>
             <form action="{% url 'purchases' %}" method="post">{% csrf_token %}
-                <button type="submit" class="btn">Checkout</button>
+                <button style="width:auto;margin: auto;" type="submit" class="btn">Checkout</button>
             </form>
         </div>
 

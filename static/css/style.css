@@ -253,7 +253,7 @@ section{
     padding:1rem;
     border-radius: .5rem;
     box-shadow: var(--box-shadow);
-    width:35rem;
+    width:40rem;
     background: #fff;
     max-height: 80vh;
     overflow: scroll;
